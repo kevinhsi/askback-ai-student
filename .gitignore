@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+*.egg-info/
+build/
+dist/
+_temp/
+*.log
+
+# ---- output----
+output/*
+!output/_test.mp4        
+!output/student_animation.mp4
+!output/*.srt            
+!output/*.json           
+!output/.gitkeep

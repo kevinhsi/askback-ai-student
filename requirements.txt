@@ -1,0 +1,14 @@
+# AskBack AI Student — runtime dependencies
+# Core
+Pillow>=10.0
+numpy>=1.26
+jsonschema>=4.20
+
+# Optional cloud TTS (only needed when ASKBACK_TTS_PROVIDER=edge / openai / azure)
+edge-tts>=7.0
+
+# Tests
+pytest>=8.0
+
+# External binary requirement (not a pip package):
+#   ffmpeg / ffprobe 必須在 PATH 中，用於音訊標準化、影片合成與驗證。

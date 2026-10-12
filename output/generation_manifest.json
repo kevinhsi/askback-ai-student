@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-11T20:09:14+08:00",
+  "generator": {
+    "name": "askback-ai-student",
+    "stage": "AI 學生迷思、動畫、TTS 與影片合成",
+    "excluded_scope": [
+      "AI 教學設計師",
+      "教師端迷思診斷報告",
+      "instructional_design.json",
+      "正確答案生成與教師講解"
+    ]
+  },
+  "steps": [
+    {
+      "step": "student_question",
+      "status": "ok",
+      "tool": "student_simulator (template/llm)",
+      "output": "output\\student_question.json",
+      "details": {
+        "unit_id": "math-g6-frac-div",
+        "misconception_id": "mc-math-g6-frac-div-01",
+        "lines": 8,
+        "generator_mode": "template",
+        "answer_leak": false
+      }
+    },
+    {
+      "step": "tts",
+      "status": "ok",
+      "tool": "tts_generator:sapi",
+      "output": "output\\student_voice.wav",
+      "details": {
+        "provider": "sapi",
+        "engine": "sapi",
+        "cue_count": 8,
+        "speech_total_seconds": 34.196,
+        "failed_attempts": [
+          {
+            "provider": "openai",
+            "status": "error",
+            "error": "MissingKeyError: 缺少 OPENAI_API_KEY（OpenAI TTS 需要金鑰）"
+          },
+          {
+            "provider": "azure",
+            "status": "error",
+            "error": "MissingKeyError: 缺少 AZURE_SPEECH_KEY（Azure Speech 需要金鑰）"
+          },
+          {
+            "provider": "edge",
+            "status": "error",
+            "error": "TTSError: edge-tts 服務失敗: NoAudioReceived"
+          }
+        ],
+        "intermediate_cues": "output\\_cues"
+      }
+    },
+    {
+      "step": "audio_timeline",
+      "status": "ok",
+      "tool": "media_pipeline.timeline + tts_generator.audio(ffmpeg)",
+      "output": "output\\student_voice.wav",
+      "details": {
+        "audio_duration": 49.945,
+        "video_duration_planned": 49.946,
+        "scenes": 8,
+        "peak": 31078,
+        "rms": 1868.12
+      }
+    },
+    {
+      "step": "subtitles",
+      "status": "ok",
+      "tool": "media_pipeline.subtitles",
+      "output": "output\\student_subtitles.srt",
+      "details": {
+        "cues": 8,
+        "encoding": "utf-8-sig"
+      }
+    },
+    {
+      "step": "animation",
+      "status": "failed",
+      "tool": "animation_generator + ffmpeg",
+      "error": "TypeError: 'str' object cannot be interpreted as an integer"
+    }
+  ],
+  "files": [
+    {
+      "path": "output\\student_question.json",
+      "bytes": 6729,
+      "sha256": "21f17449796383fc5b1dc303a50acff11d6abea2a47cea5bbe2a919037de6db5"
+    },
+    {
+      "path": "output\\student_voice.wav",
+      "bytes": 2397438,
+      "sha256": "9dc579f81646651b9a59955b1688322b77c725907e79047956a2a7a3f3f10b86"
+    },
+    {
+      "path": "output\\student_subtitles.srt",
+      "bytes": 803,
+      "sha256": "705c6321a19a386d53607e2e3642f066b3dc3e3821e0ddd5dcca7aa6955cdda5"
+    }
+  ],
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.22621-SP0",
+    "ffmpeg": "ffmpeg version 9.0.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+    "tts_providers": [
+      {
+        "provider": "openai",
+        "available": false,
+        "reason": "缺少 OPENAI_API_KEY"
+      },
+      {
+        "provider": "azure",
+        "available": false,
+        "reason": "缺少 AZURE_SPEECH_KEY"
+      },
+      {
+        "provider": "edge",
+        "available": true,
+        "reason": "免費神經語音（需網路）"
+      },
+      {
+        "provider": "sapi",
+        "available": true,
+        "reason": "本機語音 Microsoft Hanhan Desktop"
+      }
+    ]
+  },
+  "verification": null,
+  "warnings": [
+    "TTS 供應商 openai 不可用（已改用 sapi）: MissingKeyError: 缺少 OPENAI_API_KEY（OpenAI TTS 需要金鑰）",
+    "TTS 供應商 azure 不可用（已改用 sapi）: MissingKeyError: 缺少 AZURE_SPEECH_KEY（Azure Speech 需要金鑰）",
+    "TTS 供應商 edge 不可用（已改用 sapi）: TTSError: edge-tts 服務失敗: NoAudioReceived"
+  ],
+  "notes": [
+    "本 manifest 只記錄生成流程與驗證資訊，不含任何 API 金鑰。",
+    "本 manifest 不取代 student_question.json。",
+    "輸出為 AI 生成學生示範，動畫與語音僅呈現學生的迷思、困惑與提問。"
+  ]
+}
