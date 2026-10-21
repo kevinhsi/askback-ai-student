@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-11T20:09:14+08:00",
+  "generated_at": "2026-10-13T00:33:50+08:00",
   "generator": {
     "name": "askback-ai-student",
     "stage": "AI 學生迷思、動畫、TTS 與影片合成",
@@ -49,7 +49,7 @@
           {
             "provider": "edge",
             "status": "error",
-            "error": "TTSError: edge-tts 服務失敗: NoAudioReceived"
+            "error": "TTSError: edge-tts 服務失敗: WSServerHandshakeError"
           }
         ],
         "intermediate_cues": "output\\_cues"
@@ -79,17 +79,72 @@
       }
     },
     {
-      "step": "animation",
-      "status": "failed",
-      "tool": "animation_generator + ffmpeg",
-      "error": "TypeError: 'str' object cannot be interpreted as an integer"
+      "step": "animation_compose",
+      "status": "ok",
+      "tool": "animation_generator(Pillow 程式化2D) + ffmpeg rawvideo 合成，1199 影格",
+      "output": "output\\student_animation.mp4",
+      "details": {
+        "frames": 1199,
+        "fps": 24,
+        "resolution": "1280x720",
+        "planned_duration": 49.946,
+        "file_bytes": 1774296,
+        "audio_track": "output\\student_voice.wav"
+      }
+    },
+    {
+      "step": "verification",
+      "status": "ok",
+      "tool": "ffprobe + ffmpeg volumedetect + frame sampling",
+      "output": "output\\student_animation.mp4",
+      "details": {
+        "path": "C:\\Users\\User\\askback-ai-student\\output\\student_animation.mp4",
+        "checks": {
+          "has_video_stream": true,
+          "has_audio_stream": true,
+          "duration_seconds": 49.958,
+          "duration_in_range": true,
+          "file_size_bytes": 1774296,
+          "width": 1280,
+          "height": 720,
+          "video_codec": "h264",
+          "fps": 24.0,
+          "frame_count": 1199,
+          "decodable": true,
+          "audio": {
+            "mean_volume": -24.9,
+            "max_volume": -0.5
+          },
+          "audio_not_silent": true,
+          "audio_max_volume_db": -0.5,
+          "audio_codec": "aac",
+          "audio_sample_rate": 48000,
+          "motion": {
+            "ok": true,
+            "frames_sampled": 6,
+            "mean_diffs": [
+              1.266,
+              0.187,
+              0.071,
+              0.759,
+              5.445
+            ],
+            "max_diff": 5.445,
+            "threshold": 1.5,
+            "reason": "ok"
+          }
+        },
+        "ok": true,
+        "subtitles_match_lines": true,
+        "subtitle_count": 8
+      }
     }
   ],
   "files": [
     {
       "path": "output\\student_question.json",
       "bytes": 6729,
-      "sha256": "21f17449796383fc5b1dc303a50acff11d6abea2a47cea5bbe2a919037de6db5"
+      "sha256": "8362b72d3936ae1ee59e2203292b57636ab288addb0149a3bb7fef794202af37"
     },
     {
       "path": "output\\student_voice.wav",
@@ -100,6 +155,16 @@
       "path": "output\\student_subtitles.srt",
       "bytes": 803,
       "sha256": "705c6321a19a386d53607e2e3642f066b3dc3e3821e0ddd5dcca7aa6955cdda5"
+    },
+    {
+      "path": "output\\student_animation.mp4",
+      "bytes": 1774296,
+      "sha256": "8696f6a62a4769214df725cf16f06f4db3b778d04a553a42e46dc82767d8cd0c"
+    },
+    {
+      "path": "output\\generation_manifest.json",
+      "bytes": 4462,
+      "sha256": "f9e9cd8039af33eafb7a8e86fc5e492e89281fdadfd0ce5cf0d62342df44e78b"
     }
   ],
   "environment": {
@@ -129,11 +194,51 @@
       }
     ]
   },
-  "verification": null,
+  "verification": {
+    "path": "C:\\Users\\User\\askback-ai-student\\output\\student_animation.mp4",
+    "checks": {
+      "has_video_stream": true,
+      "has_audio_stream": true,
+      "duration_seconds": 49.958,
+      "duration_in_range": true,
+      "file_size_bytes": 1774296,
+      "width": 1280,
+      "height": 720,
+      "video_codec": "h264",
+      "fps": 24.0,
+      "frame_count": 1199,
+      "decodable": true,
+      "audio": {
+        "mean_volume": -24.9,
+        "max_volume": -0.5
+      },
+      "audio_not_silent": true,
+      "audio_max_volume_db": -0.5,
+      "audio_codec": "aac",
+      "audio_sample_rate": 48000,
+      "motion": {
+        "ok": true,
+        "frames_sampled": 6,
+        "mean_diffs": [
+          1.266,
+          0.187,
+          0.071,
+          0.759,
+          5.445
+        ],
+        "max_diff": 5.445,
+        "threshold": 1.5,
+        "reason": "ok"
+      }
+    },
+    "ok": true,
+    "subtitles_match_lines": true,
+    "subtitle_count": 8
+  },
   "warnings": [
     "TTS 供應商 openai 不可用（已改用 sapi）: MissingKeyError: 缺少 OPENAI_API_KEY（OpenAI TTS 需要金鑰）",
     "TTS 供應商 azure 不可用（已改用 sapi）: MissingKeyError: 缺少 AZURE_SPEECH_KEY（Azure Speech 需要金鑰）",
-    "TTS 供應商 edge 不可用（已改用 sapi）: TTSError: edge-tts 服務失敗: NoAudioReceived"
+    "TTS 供應商 edge 不可用（已改用 sapi）: TTSError: edge-tts 服務失敗: WSServerHandshakeError"
   ],
   "notes": [
     "本 manifest 只記錄生成流程與驗證資訊，不含任何 API 金鑰。",
